@@ -130,6 +130,12 @@ model = QAModel(
     dropout=model_params['dropout']
 ).to(device)
 
+# If there are multiple GPUs, wrap the model with nn.DataParallel
+if torch.cuda.device_count() > 1:
+    print("Let's use", torch.cuda.device_count(), "GPUs!")
+    model = nn.DataParallel(model)
+model = model.to(device)
+
 optimizer = Adam(model.parameters(), lr=training_params['lr'])
 
 # Train the model
@@ -179,12 +185,10 @@ print(f'The model has {len(vocab)} tokens')
 # Create a variable with the size of your input
 x = torch.randint(high=len(vocab), size=(1, 30), dtype=torch.long).to(device)
 
-
 # Generate a diagram for a specific model
 y = model(x)
 dot = torchviz.make_dot(y.mean(), params=dict(model.named_parameters()))
 
-# Save the diagram to disk
 dot.render("model_diagram", format="png")
 
 
