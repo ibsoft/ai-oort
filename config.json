@@ -11,7 +11,7 @@
         "lr": 0.0001,
         "batch_size": 128,
         "max_sequence_length": 50,
-        "num_epochs": 10,
+        "num_epochs": 5,
         "stop_loss": 0.0006
     },
     "generation": {
